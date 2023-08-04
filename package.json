@@ -1,7 +1,6 @@
 {
-  "name": "graded-assessment",
+  "name": "simple-portfolio-template",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.3.2",
     "@emotion/react": "^11.10.4",
