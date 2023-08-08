@@ -36,32 +36,31 @@ const Header = () => {
   const handleClick = (anchor) => () => {
     const id = `${anchor}-section`;
     const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+
+    element?.scrollIntoView?.({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   const prevScrollY = useRef(0);
-  const [goingUp, setGoingUp] = React.useState(false);
+  const [transform, setTransform] = React.useState("0px");
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (prevScrollY.current < currentScrollY && goingUp) {
-        setGoingUp(false);
+      if (prevScrollY.current < currentScrollY) {
+        setTransform("-100px");
       }
-      if (prevScrollY.current > currentScrollY && !goingUp) {
-        setGoingUp(true);
+      if (prevScrollY.current > currentScrollY) {
+        setTransform("0px");
       }
       prevScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [goingUp]);
+  }, []);
 
   return (
     <Box
@@ -70,7 +69,7 @@ const Header = () => {
       left={0}
       right={0}
       translateY={0}
-      transform={`translateY(${goingUp ? 0 : "-100%"})`}
+      transform={`translateY(${transform})`}
       transitionProperty="transform"
       transitionDuration=".3s"
       transitionTimingFunction="ease-in-out"
@@ -103,7 +102,7 @@ const Header = () => {
                 Projects
               </a>
               <a href="#contactme-section" onClick={handleClick("contactme")}>
-                Contact me
+                Contact Me
               </a>
             </HStack>
           </nav>

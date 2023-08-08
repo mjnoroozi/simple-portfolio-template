@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import {
   Box,
   Button,
@@ -23,31 +23,33 @@ const LandingSection = () => {
 
   const formik = useFormik({
     initialValues: {
-      firstName: "user name",
-      email: "user email",
+      firstName: "",
+      email: "",
       type: "hireMe",
-      comment: "a message from the user",
+      comment: "",
     },
-    onSubmit: async (values) => {
-      await submit("", values);
-
-      if (response === null || response?.type === "error") {
-        onOpen(response?.type, response?.message);
-      } else {
-        formik.resetForm();
-      }
-    },
+    onSubmit: (values) => submit("", values),
     validationSchema: Yup.object({
       firstName: Yup.string().required("Required"),
       email: Yup.string().required("Required").email("Invalid email address"),
       type: Yup.string().optional(),
       comment: Yup.string()
         .required("Required")
-        .min(10, "Must be at least 25 characters"),
+        .min(25, "Must be at least 25 characters"),
     }),
   });
 
-  useEffect(() => {}, [formik.getFieldProps()]);
+  // You need to listen to changes in the `response` object from the `useSubmit` hook. Also, when the form is submitted, a loading indicator should be shown in the Submit button. You can use the `isLoading` property from the `useSubmit` hook.
+
+  useEffect(() => {
+    if (response === null) return;
+
+    onOpen(response?.type, response?.message);
+
+    if (response?.type === "success") {
+      formik.resetForm();
+    }
+  }, [response]);
 
   return (
     <FullScreenSection
@@ -63,35 +65,32 @@ const LandingSection = () => {
         <Box p={6} rounded="md" w="100%">
           <form onSubmit={formik.handleSubmit}>
             <VStack spacing={4}>
-              <FormControl isInvalid={formik.errors.firstName}>
+              <FormControl
+                isInvalid={formik.touched.firstName && formik.errors.firstName}
+              >
                 <FormLabel htmlFor="firstName">Name</FormLabel>
                 <Input
                   id="firstName"
                   name="firstName"
-                  onChange={formik.handleChange}
-                  value={formik.values.firstName}
+                  {...formik.getFieldProps("firstName")}
                 />
                 <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={formik.errors.email}>
+              <FormControl
+                isInvalid={formik.touched.email && formik.errors.email}
+              >
                 <FormLabel htmlFor="email">Email Address</FormLabel>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
+                  {...formik.getFieldProps("email")}
                 />
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
               </FormControl>
               <FormControl>
                 <FormLabel htmlFor="type">Type of enquiry</FormLabel>
-                <Select
-                  id="type"
-                  name="type"
-                  onChange={formik.handleChange}
-                  value={formik.values.type}
-                >
+                <Select id="type" name="type" {...formik.getFieldProps("type")}>
                   <option value="hireMe">Freelance project proposal</option>
                   <option value="openSource">
                     Open source consultancy session
@@ -99,14 +98,15 @@ const LandingSection = () => {
                   <option value="other">Other</option>
                 </Select>
               </FormControl>
-              <FormControl isInvalid={formik.errors.comment}>
+              <FormControl
+                isInvalid={formik.touched.comment && formik.errors.comment}
+              >
                 <FormLabel htmlFor="comment">Your message</FormLabel>
                 <Textarea
                   id="comment"
                   name="comment"
                   height={250}
-                  onChange={formik.handleChange}
-                  value={formik.values.comment}
+                  {...formik.getFieldProps("comment")}
                 />
                 <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
               </FormControl>

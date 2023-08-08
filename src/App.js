@@ -8,6 +8,8 @@ import { AlertProvider } from "./context/alertContext";
 import Alert from "./components/Alert";
 
 function App() {
+  document.documentElement.style.scrollBehavior = "smooth";
+
   return (
     <ChakraProvider>
       <AlertProvider>

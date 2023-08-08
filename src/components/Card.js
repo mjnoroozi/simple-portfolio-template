@@ -11,26 +11,34 @@ const Card = ({ title, description, imageSrc }) => {
   return (
     <VStack
       spacing={4}
-      padding={4}
+      padding={0}
       backgroundColor="white"
-      borderRadius="md"
       boxShadow="md"
       width="100%"
       maxWidth="400px"
+      borderRadius="lg"
     >
-      <Image src={imageSrc} />
-      <Heading size="md">{title}</Heading>
-      <Text color="black">{description}</Text>
-      <HStack
-        as="a"
-        href="#"
-        spacing={2}
-        color="blue.500"
-        _hover={{ color: "blue.600" }}
-      >
-        <Text>Learn more</Text>
-        <FontAwesomeIcon icon={faArrowRight} size="1x" />
-      </HStack>
+      <Image src={imageSrc} borderRadius="lg" />
+
+      <VStack padding={4} align="start" spacing={4}>
+        <Heading size="md" color="black">
+          {title}
+        </Heading>
+        <Text color="black">{description}</Text>
+        <HStack
+          as="a"
+          href="#"
+          spacing={2}
+          color="black"
+          _hover={{ color: "blue.600" }}
+          fontSize="14"
+          fontWeight="600"
+          align="center"
+        >
+          <Text>See more</Text>
+          <FontAwesomeIcon icon={faArrowRight} size="1x" />
+        </HStack>
+      </VStack>
     </VStack>
   );
 };
